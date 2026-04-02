@@ -1,0 +1,35 @@
+# Persona-GA (Baseline method) Zhang et al. (2025)
+
+# ==================== Data path configuration ====================
+persona_path: data/personas/character.jsonl
+output_path: result/attack/baseline1/evolved_personas.jsonl
+
+# ==================== GA Algorithm Hyperparameters ====================
+generations: 40           # Number of generations
+population_size_N: 35     # Population size (N)
+crossover_M: 5            # Number of crossover operations per generation (M)
+mutation_M: 5             # Number of mutation operations per generation (M)
+selection_metric: 'asr'     # Evaluation metric: 'asr' (Attack Success Rate) or 'rta' (Refusal to Answer Rate)
+
+# ==================== API Configuration (for crossover/mutation) ====================
+api_model: qwen3-max
+api_key: ''
+api_base_url: ''
+api_max_concurrency: 2  # Control concurrency to avoid API rate limiting
+
+# ==================== Inference Model Configuration ====================
+inference_model_path: models/Qwen2.5-7B-Instruct
+inference_devices: '0,1'  # GPU device IDs, separated by commas
+inference_max_model_len: 4096     # Total context window size (tokens), should be >= prompt_tokens + inference_max_output_tokens
+inference_max_output_tokens: 2048  # Output limit (max new tokens generated per inference)
+inference_batch_size: 32
+tensor_parallel_size: 2
+inference_gpu_memory_utilization: 0.9
+
+# ==================== Judger Model Configuration ====================
+judger_model_path: models/wildguard
+judger_devices: '2'  # GPU device IDs, separated by commas  
+judger_max_model_len: 4096         # Input limit (tokens), should be >= judger prompt length + judger_max_output_tokens
+judger_max_output_tokens: 64       # Output limit (max new tokens generated per judger inference)
+judger_batch_size: 32
+judger_gpu_memory_utilization: 0.9

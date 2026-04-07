@@ -1,0 +1,41 @@
+# Persona Evolution configuration
+
+# ==================== Data path configuration ====================
+persona_path: data/personas/character.jsonl
+output_path: result/attack/attack_qlora/evolved_personas.jsonl
+
+# ==================== API configuration (for crossover/mutation) ====================
+api_model: qwen3-max
+# REMOVED: hardcoded API key for security. Set via environment variable or CLI.
+# Example (Linux/macOS): export DASHSCOPE_API_KEY=sk-...
+# Example (Windows Powershell): $env:DASHSCOPE_API_KEY = 'sk-...'
+api_key: ''
+api_base_url: ''
+api_max_concurrency: 2  # Controls concurrency to avoid API rate limits
+
+# ==================== Inference model configuration ====================
+inference_model_path: models/Qwen2.5-7B-Instruct
+inference_adapter_path: result/attack/attack_qlora/Qwen2.5-7B-RobustDPO-QLora  # QLora adapter path
+inference_devices: '0,1'  # GPU device IDs
+inference_max_model_len: 4096
+inference_max_output_tokens: 2048
+inference_batch_size: 32
+tensor_parallel_size: 2
+inference_gpu_memory_utilization: 0.9
+
+# ==================== Judger model configuration ====================
+judger_model_path: models/wildguard
+judger_devices: '2'  # GPU device IDs
+judger_max_model_len: 4096
+judger_max_output_tokens: 64
+judger_batch_size: 32
+judger_gpu_memory_utilization: 0.9
+
+# ==================== Evolution algorithm hyperparameters ====================
+selection_metric: 'asr' # selection metric: 'asr' or 'rta'
+generations: 40 # number of generations
+beta: 0.3
+select_parents_num: 10
+elite_N: 35
+ucb_c: 0.1 # UCB exploration coefficient
+selection_strategy: 'ucb' # selection strategy: 'ucb', 'epsilon', 'hybrid', 'weighted'

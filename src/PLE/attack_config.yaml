@@ -1,0 +1,37 @@
+# Persona Evolution configuration
+
+# ==================== Data path configuration ====================
+persona_path: data/personas/character.jsonl
+output_path: result/attack/attack1/evolved_personas.jsonl
+
+# ==================== API configuration (for crossover/mutation) ====================
+api_model: qwen3-max
+api_key: ''
+api_base_url: ''
+api_max_concurrency: 2  # Control concurrency to avoid API rate limits
+
+# ==================== Inference model configuration ====================
+inference_model_path: models/Qwen2.5-7B-Instruct
+inference_devices: '0,1'  # GPU device IDs, separated by commas
+inference_max_model_len: 4096  # Total context window size (tokens), should be >= prompt_tokens + inference_max_output_tokens
+inference_max_output_tokens: 2048  # Output limit (max new tokens generated per inference)
+inference_batch_size: 32
+tensor_parallel_size: 2
+inference_gpu_memory_utilization: 0.9
+
+# ==================== Judger model configuration ====================
+judger_model_path: models/wildguard
+judger_devices: '2'  # GPU device IDs, separated by commas  
+judger_max_model_len: 4096 # Input limit, should be >= judger prompt length + judger_max_output_tokens
+judger_max_output_tokens: 64       # Output limit (max new tokens generated per judger inference)
+judger_batch_size: 32
+judger_gpu_memory_utilization: 0.9
+
+# ==================== Evolution algorithm hyperparameters ====================
+selection_metric: 'asr' # Selection metric: 'asr' or 'rta'
+generations: 40 # Number of generations
+beta: 0.3
+select_parents_num: 10
+elite_N: 35
+ucb_c: 0.1 # UCB exploration coefficient
+selection_strategy: 'ucb' # Selection strategy: 'ucb', 'epsilon', 'hybrid', 'weighted'
